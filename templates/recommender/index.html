@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>咖啡推薦系統</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>咖啡推薦系統</h1>
+    <p>請描述您喜歡的咖啡特徵或輸入您的年齡（例如：30 years old 或 30歲）：</p>
+    <input type="text" id="userInput" placeholder="輸入您的喜好或年齡">
+    <button onclick="getRecommendation()">獲取推薦</button>
+    <div id="result"></div>
+
+    <script>
+        function getRecommendation() {
+            var userInput = document.getElementById('userInput').value;
+            
+            fetch('/recommend/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: 'input=' + encodeURIComponent(userInput)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = '推薦的咖啡: ' + data.recommendation;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = '發生錯誤，請稍後再試。';
+            });
+        }
+    </script>
+</body>
+</html>
