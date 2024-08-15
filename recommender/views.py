@@ -1,13 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
-
-# 在這裡放置您原有的函數（age_to_group, recommend_coffee 等）
-
 import os
 import chardet
 from django.conf import settings
@@ -29,14 +26,20 @@ df['features'] = df['What is your age?'].astype(str) + ' ' + \
                  df['What kind of sugar or sweetener do you add?'].fillna('') + ' ' + \
                  df['What roast level of coffee do you prefer?'].fillna('') + ' ' + \
                  df['How strong do you like your coffee?'].fillna('') + ' ' + \
-                 df['How much caffeine do you like in your coffee?'].fillna('')
+                 df['How much caffeine do you like in your coffee?'].fillna('') + ' ' + \
+                 df['Gender'].fillna('') + ' ' + \
+                 df['Education Level'].fillna('') + ' ' + \
+                 df['Ethnicity/Race'].fillna('') + ' ' + \
+                 df['Employment Status'].fillna('') + ' ' + \
+                 df['Number of Children'].astype(str).fillna('') + ' ' + \
+                 df['Political Affiliation'].fillna('')
 
 # 創建CountVectorizer對象
 vectorizer = CountVectorizer()
 feature_matrix = vectorizer.fit_transform(df['features'])
 
 def index(request):
-    return render(request, 'recommender/index.html')
+    return render(request, 'coffee_recommender.html')
 
 def age_to_group(age):
     if age < 18:
@@ -53,7 +56,6 @@ def age_to_group(age):
         return '55-64 years old'
     else:
         return '>65 years old'
-
 
 coffee_translations = {
     'Regular drip coffee': '普通濾泡咖啡',
@@ -72,16 +74,16 @@ coffee_translations = {
 }
 
 def recommend_coffee(user_input):
-    # 檢查用戶輸入是否為年齡數值或"數值+years old"格式
+    # 檢查用戶輸入是否為年齡數值或"數值+歲"格式
     age_pattern = r'(\d+)(?:\s*(?:years old|歲))?'
     match = re.match(age_pattern, user_input)
 
     if match:
         age = int(match.group(1))
         age_group = age_to_group(age)
-        user_input = age_group  # 將年齡數值或"數值+years old"轉換為年齡區間
+        user_input = age_group  # 將年齡數值或"數值+歲"轉換為年齡區間
     else:
-        # 將中文翻譯成英文
+        # 擴展中英文翻譯字典
         translations = {
             '強': 'strong',
             '弱': 'weak',
@@ -89,8 +91,34 @@ def recommend_coffee(user_input):
             '濃': 'dark',
             '咖啡因': 'caffeine',
             '牛奶': 'milk',
-            '糖': 'sugar'
+            '糖': 'sugar',
+            '男': 'male',
+            '女': 'female',
+            '其他性別': 'other gender',
+            '高中': 'high school',
+            '大學': 'college',
+            '研究所': 'graduate school',
+            '博士': 'doctorate',
+            '全職': 'full-time',
+            '兼職': 'part-time',
+            '失業': 'unemployed',
+            '學生': 'student',
+            '退休': 'retired',
+            '白人': 'white',
+            '黑人': 'black',
+            '亞洲人': 'asian',
+            '西班牙裔': 'hispanic',
+            '已婚': 'married',
+            '單身': 'single',
+            '有孩子': 'has children',
+            '無孩子': 'no children',
+            '民主黨': 'democrat',
+            '共和黨': 'republican',
+            '獨立黨': 'independent',
+            '中立': 'neutral'
         }
+
+        # 將用戶輸入中的中文關鍵詞替換為英文
         for cn, en in translations.items():
             user_input = user_input.replace(cn, en)
 
@@ -115,17 +143,9 @@ def recommend_coffee(user_input):
 
     return translated_coffee
 
-
-
 def recommend(request):
     if request.method == 'POST':
         user_input = request.POST.get('input', '')
         recommended_coffee = recommend_coffee(user_input)
         return JsonResponse({'recommendation': recommended_coffee})
     return JsonResponse({'error': 'Invalid request method'})
-
-from django.apps import apps
-
-def some_view(request):
-    df = apps.get_app_config('recommender').df
-    # 使用 df 進行操作
