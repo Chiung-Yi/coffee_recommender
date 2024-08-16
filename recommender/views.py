@@ -8,6 +8,7 @@ import re
 import os
 import chardet
 from django.conf import settings
+import random
 
 def detect_encoding(file_path):
     with open(file_path, 'rb') as file:
@@ -58,19 +59,19 @@ def age_to_group(age):
         return '>65 years old'
 
 coffee_translations = {
-    'Regular drip coffee': '普通濾泡咖啡',
-    'Espresso': '義式濃縮咖啡',
-    'Latte': '拿鐵咖啡',
-    'Cappuccino': '卡布奇諾',
-    'Americano': '美式咖啡',
-    'Mocha': '摩卡咖啡',
-    'Macchiato': '瑪奇朵',
-    'Flat White': '白咖啡',
-    'Cortado': '科塔多咖啡',
-    'Iced coffee': '冰咖啡',
-    'Cold brew': '冷萃咖啡',
-    'Pourover': '手沖咖啡',
-    'French press': '法式壓濾咖啡'
+    'Regular drip coffee': ('普通濾泡咖啡', 'https://www.catamona1998.com/categories/rainforest-alliance'),
+    'Espresso': ('義式濃縮咖啡', 'https://www.catamona1998.com/categories/espresso'),
+    'Latte': ('拿鐵咖啡', 'https://www.catamona1998.com/categories/latte'),
+    'Cappuccino': ('卡布奇諾', 'https://www.catamona1998.com/categories/cappuccino'),
+    'Americano': ('美式咖啡', 'https://www.catamona1998.com/categories/americano'),
+    'Mocha': ('摩卡咖啡', 'https://www.catamona1998.com/categories/mocha'),
+    'Macchiato': ('瑪奇朵', 'https://www.catamona1998.com/categories/macchiato'),
+    'Flat White': ('白咖啡', 'https://www.catamona1998.com/categories/flat-white'),
+    'Cortado': ('科塔多咖啡', 'https://www.catamona1998.com/categories/cortado'),
+    'Iced coffee': ('冰咖啡', 'https://www.catamona1998.com/categories/iced-coffee'),
+    'Cold brew': ('冷萃咖啡', 'https://www.catamona1998.com/categories/cold-brew'),
+    'Pourover': ('手沖咖啡', 'https://www.catamona1998.com/categories/pourover'),
+    'French press': ('法式壓濾咖啡', 'https://www.catamona1998.com/categories/french-press')
 }
 
 def recommend_coffee(user_input):
@@ -134,18 +135,18 @@ def recommend_coffee(user_input):
     # 獲取推薦的咖啡種類
     recommended_coffee = df.iloc[similar_coffee_index]['What is your favorite coffee drink?']
 
-    # 如果推薦的咖啡是 nan，則推薦美式咖啡
-    if pd.isna(recommended_coffee):
-        recommended_coffee = 'Americano'
+    # 如果推薦的咖啡是 nan 或 'Other'，則隨機選擇一種咖啡
+    if pd.isna(recommended_coffee) or recommended_coffee == 'Other':
+        recommended_coffee = random.choice(list(coffee_translations.keys()))
 
-    # 翻譯推薦的咖啡種類
-    translated_coffee = coffee_translations.get(recommended_coffee, recommended_coffee)
+    # 獲取翻譯後的咖啡名稱和URL
+    translated_coffee, url = coffee_translations.get(recommended_coffee, (recommended_coffee, ''))
 
-    return translated_coffee
+    return translated_coffee, url
 
 def recommend(request):
     if request.method == 'POST':
         user_input = request.POST.get('input', '')
-        recommended_coffee = recommend_coffee(user_input)
-        return JsonResponse({'recommendation': recommended_coffee})
+        recommended_coffee, url = recommend_coffee(user_input)
+        return JsonResponse({'recommendation': recommended_coffee, 'url': url})
     return JsonResponse({'error': 'Invalid request method'})
