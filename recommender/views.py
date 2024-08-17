@@ -59,19 +59,19 @@ def age_to_group(age):
         return '>65 years old'
 
 coffee_translations = {
-    'Regular drip coffee': ('普通濾泡咖啡', 'https://www.catamona1998.com/categories/rainforest-alliance'),
-    'Espresso': ('義式濃縮咖啡', 'https://www.catamona1998.com/categories/espresso'),
-    'Latte': ('拿鐵咖啡', 'https://www.catamona1998.com/categories/latte'),
-    'Cappuccino': ('卡布奇諾', 'https://www.catamona1998.com/categories/cappuccino'),
-    'Americano': ('美式咖啡', 'https://www.catamona1998.com/categories/americano'),
-    'Mocha': ('摩卡咖啡', 'https://www.catamona1998.com/categories/mocha'),
-    'Macchiato': ('瑪奇朵', 'https://www.catamona1998.com/categories/macchiato'),
-    'Flat White': ('白咖啡', 'https://www.catamona1998.com/categories/flat-white'),
-    'Cortado': ('科塔多咖啡', 'https://www.catamona1998.com/categories/cortado'),
-    'Iced coffee': ('冰咖啡', 'https://www.catamona1998.com/categories/iced-coffee'),
-    'Cold brew': ('冷萃咖啡', 'https://www.catamona1998.com/categories/cold-brew'),
-    'Pourover': ('手沖咖啡', 'https://www.catamona1998.com/categories/pourover'),
-    'French press': ('法式壓濾咖啡', 'https://www.catamona1998.com/categories/french-press')
+    'Regular drip coffee': {'chinese': '普通濾泡咖啡', 'english': 'Regular drip coffee'},
+    'Espresso': {'chinese': '義式濃縮咖啡', 'english': 'Espresso'},
+    'Latte': {'chinese': '拿鐵咖啡', 'english': 'Latte'},
+    'Cappuccino': {'chinese': '卡布奇諾', 'english': 'Cappuccino'},
+    'Americano': {'chinese': '美式咖啡', 'english': 'Americano'},
+    'Mocha': {'chinese': '摩卡咖啡', 'english': 'Mocha'},
+    'Macchiato': {'chinese': '瑪奇朵', 'english': 'Macchiato'},
+    'Flat White': {'chinese': '白咖啡', 'english': 'Flat White'},
+    'Cortado': {'chinese': '科塔多咖啡', 'english': 'Cortado'},
+    'Iced coffee': {'chinese': '冰咖啡', 'english': 'Iced coffee'},
+    'Cold brew': {'chinese': '冷萃咖啡', 'english': 'Cold brew'},
+    'Pourover': {'chinese': '手沖咖啡', 'english': 'Pourover'},
+    'French press': {'chinese': '法式壓濾咖啡', 'english': 'French press'}
 }
 
 def recommend_coffee(user_input):
@@ -140,9 +140,11 @@ def recommend_coffee(user_input):
         recommended_coffee = random.choice(list(coffee_translations.keys()))
 
     # 獲取翻譯後的咖啡名稱和URL
-    translated_coffee, url = coffee_translations.get(recommended_coffee, (recommended_coffee, ''))
+    coffee_data = coffee_translations.get(recommended_coffee, 
+                                          {'chinese': recommended_coffee, 'english': recommended_coffee})
+    url = f"https://www.catamona1998.com/categories/{recommended_coffee.lower().replace(' ', '-')}"
 
-    return translated_coffee, url
+    return coffee_data, url
 
 def recommend(request):
     if request.method == 'POST':

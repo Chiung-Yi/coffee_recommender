@@ -316,266 +316,64 @@
           }
         }
       </style>
-</head>
-<body>
-    <nav class="top-menu">
-        <div class="menu-container">
-            <div class="language-switch">
-                <span class="switch-label">EN</span>
-                <div class="switch-bar" id="languageSwitch">
-                    <div class="switch-handle"></div>
-                </div>
-                <span class="switch-label">中文</span>
-            </div>
-        </div>
-    </nav>
-    <header class="header">
-        <h1 data-lang-key="title">咖啡推薦系統</h1>
-        <img src="static/images/coffee-header.jpg" alt="A steaming cup of coffee surrounded by roasted coffee beans on a rustic wooden table" width="100%" height="100%" style="position: absolute; top: 0; left: 0; object-fit: cover; z-index: -1;">
-    </header>
-<body>
-    <p>寫下關於您自己的一些事：</p>
-    <input type="text" id="userInput" placeholder="輸入例如:性別、年齡..等">
-    <div>
-        <input type="button" id="recommend-btn" value="獲取推薦" onclick="getRecommendation()">
-    </div>
-    <div id="result"></div>
-
-    <div class="coffee-carousel">
-        <div class="coffee-varieties">
-            <div class="coffee-variety">
-                <img src="{% static 'images/arabica-full.jpg' %}" alt="Coffee Variety 1">
-                <div class="coffee-info">
-                    <h3>阿拉比卡</h3>
-                    <p>甜美順滑，風味複雜。最受歡迎的咖啡品種。</p>
-                </div>
-            </div>
-            <div class="coffee-variety">
-                <img src="{% static '/images/robusta-full.jpg' %}" alt="Coffee Variety 2">
-                <div class="coffee-info">
-                    <h3>羅布斯塔</h3>
-                    <p>強烈苦味，咖啡因含量高。常用於義式濃縮咖啡</p>
-                </div>
-            </div>
-            <div class="coffee-variety">
-                <img src="{% static '/images/liberica-full.jpg' %}" alt="Coffee Variety 3">
-                <div class="coffee-info">
-                    <h3>利比里卡</h3>
-                    <p>獨特的水果和木質風味。罕見，主要在東南亞種植。</p>
+    </head>
+    <body>
+        <div class="top-menu">
+            <div class="menu-container">
+                <div id="languageSwitch" class="language-switch">
+                    <span class="switch-label" data-lang-key="eng">ENG</span>
+                    <div class="switch-bar">
+                        <div class="switch-handle"></div>
+                    </div>
+                    <span class="switch-label" data-lang-key="zh">中文</span>
                 </div>
             </div>
         </div>
-        <button class="carousel-button prev">&#10094;</button>
-        <button class="carousel-button next">&#10095;</button>
-    </div>
-
-    <script>
-        function getRecommendation() {
-            var userInput = document.getElementById('userInput').value;
-            
-            fetch('/recommend/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: 'input=' + encodeURIComponent(userInput)
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerText = '推薦的咖啡: ' + data.recommendation;
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                document.getElementById('result').innerText = '發生錯誤，請稍後再試。';
-            });
-        }
-        const userInfoText = document.getElementById('userInfoText');
-        const recommendBtn = document.getElementById('recommendBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const userInput = document.getElementById('userInput');
-        const characteristicsContainer = document.getElementById('characteristicsContainer');
-        const coffeeVarieties = document.querySelector('.coffee-varieties');
-        const prevBtn = document.querySelector('.carousel-button.prev');
-        const nextBtn = document.querySelector('.carousel-button.next');
-        const languageSwitch = document.getElementById('languageSwitch');
-        
-        let currentSlide = 0;
-        const totalSlides = document.querySelectorAll('.coffee-variety').length;
     
-        function showSlide(index) {
-          if (index < 0) {
-            currentSlide = totalSlides - 1;
-          } else if (index >= totalSlides) {
-            currentSlide = 0;
-          } else {
-            currentSlide = index;
-          }
-          coffeeVarieties.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
+        <div class="header">
+            <h1 data-lang-key="title">咖啡推薦系統</h1>
+            <img src="static/images/coffee-header.jpg" alt="Coffee header" style="width:100%; height:100%; position: absolute; top: 0; left: 0; object-fit: cover; z-index: -1;">
+        </div>
     
-        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
-        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+        <div>
+            <p data-lang-key="description">寫下關於您自己的一些事：</p>
+            <textarea id="userInput" rows="4" cols="50" data-lang-key="input-placeholder" placeholder="輸入例如:性別、年齡..等"></textarea>
+            <div class="button-area">
+              <button id="clearInput" class="btn" data-lang-key="clear">清除</button>
+              <button id="getRecommendation" class="btn" data-lang-key="get-recommendation">獲取推薦</button>
+            </div>
+        </div>
     
-        const allCharacteristics = [
-          "Early Bird", "Night Owl", "Adventurous", "Traditional", "Sweet Tooth", "Health Conscious",
-          "Energetic", "Relaxed", "Focused", "Creative", "Social", "Introspective",
-          "Outdoor Enthusiast", "City Dweller", "Traveler", "Homebody", "Foodie", "Minimalist"
-        ];
+        <div id="result"></div>
     
-        let selectedCharacteristics = [];
+        <div class="coffee-carousel">
+            <div class="coffee-varieties">
+                <div class="coffee-variety">
+                    <img src="{% static 'images/arabica-full.jpg' %}" alt="Arabica Coffee">
+                    <div class="coffee-info">
+                        <h3 data-lang-key="arabica">阿拉比卡</h3>
+                        <p data-lang-key="arabica-description">甜美順滑，風味複雜。最受歡迎的咖啡品種。</p>
+                    </div>
+                </div>
+                <div class="coffee-variety">
+                    <img src="{% static '/images/robusta-full.jpg' %}" alt="Robusta Coffee">
+                    <div class="coffee-info">
+                        <h3 data-lang-key="robusta">羅布斯塔</h3>
+                        <p data-lang-key="robusta-description">強烈苦味，咖啡因含量高。常用於義式濃縮咖啡</p>
+                    </div>
+                </div>
+                <div class="coffee-variety">
+                    <img src="{% static '/images/liberica-full.jpg' %}" alt="Liberica Coffee">
+                    <div class="coffee-info">
+                        <h3 data-lang-key="liberica">利比里卡</h3>
+                        <p data-lang-key="liberica-description">獨特的水果和木質風味。罕見，主要在東南亞種植。</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-button prev">❮</button>
+            <button class="carousel-button next">❯</button>
+        </div>
     
-        function shuffleArray(array) {
-          for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-          }
-        }
-    
-        function updateCharacteristics() {
-          characteristicsContainer.innerHTML = '';
-          shuffleArray(allCharacteristics);
-          const displayCharacteristics = allCharacteristics.slice(0, 6);
-    
-          displayCharacteristics.forEach(char => {
-            const btn = document.createElement('button');
-            btn.className = 'characteristic';
-            btn.textContent = char;
-            btn.addEventListener('click', () => handleCharacteristicClick(char, btn));
-            characteristicsContainer.appendChild(btn);
-          });
-        }
-    
-        function handleCharacteristicClick(char, btn) {
-          if (selectedCharacteristics.includes(char)) {
-            selectedCharacteristics = selectedCharacteristics.filter(item => item !== char);
-            btn.style.backgroundColor = '#6f4e37';
-          } else {
-            selectedCharacteristics.push(char);
-            btn.style.backgroundColor = '#8b6b4a';
-          }
-          updateUserInfo();
-          updateCharacteristics();
-        }
-    
-        function updateUserInfo() {
-          let infoText = '';
-          if (selectedCharacteristics.length > 0) {
-            infoText += 'You are: ' + selectedCharacteristics.join(', ');
-          }
-          if (userInput.value) {
-            if (infoText) infoText += '\n\n';
-            infoText += 'Additional information: ' + userInput.value;
-          }
-          userInfoText.textContent = infoText || 'Choose the trait about yourself...';
-        }
-    
-        userInput.addEventListener('input', updateUserInfo);
-    
-        recommendBtn.addEventListener('click', () => {
-          if (selectedCharacteristics.length === 0 && !userInput.value) {
-            userInfoText.textContent = 'Please select at least one characteristic or write something about yourself.';
-            return;
-          }
-    
-          const recommendations = {
-            'Early Bird': 'A bright, citrusy Ethiopian Arabica light roast to kickstart your day.',
-            'Night Owl': 'A smooth, chocolatey Brazilian Arabica dark roast to keep you company at night.',
-            'Adventurous': 'Try our exotic Yirgacheffe Arabica with notes of blueberry and jasmine.',
-            'Traditional': 'A classic Colombian Arabica medium roast with a balanced flavor profile.',
-            'Sweet Tooth': 'Our caramel macchiato blend with hints of vanilla and toffee, using a mix of Arabica and Robusta.',
-            'Health Conscious': 'Our low-acid Arabica cold brew, perfect for sensitive stomachs.',
-            'Energetic': 'A vibrant Kenyan Arabica coffee with a zesty, wine-like acidity.',
-            'Relaxed': 'A mellow Sumatran Arabica coffee with earthy, herbal notes.',
-            'Focused': 'A strong Italian espresso blend using Arabica and Robusta for sharp concentration.',
-            'Creative': 'A fruity and floral Panama Geisha Arabica to inspire your imagination.',
-            'Social': 'A versatile Arabica medium roast perfect for sharing with friends.',
-            'Introspective': 'A complex Ethiopian Sidamo Arabica with layers of flavor to contemplate.',
-            'Outdoor Enthusiast': 'A robust French roast Arabica that stands up well to nature\'s elements.',
-            'City Dweller': 'A sophisticated single-origin Arabica coffee from an urban roastery.',
-            'Traveler': 'A worldly blend featuring Arabica beans from various exotic locations.',
-            'Homebody': 'A comforting Arabica house blend that feels like a warm hug.',
-            'Foodie': 'A nuanced Arabica light roast with tasting notes to rival fine wine.',
-            'Minimalist': 'A clean, crisp Arabica light roast with no added flavors.'
-          };
-    
-          let recommendation = 'Based on your preferences, we recommend:\n\n';
-          selectedCharacteristics.forEach(char => {
-            recommendation += `- ${recommendations[char] || 'A specially curated coffee for ' + char + ' individuals.'}\n`;
-          });
-    
-          if (userInput.value) {
-            recommendation += `\nConsidering your additional input "${userInput.value}", we also suggest exploring our artisanal coffee selection for a perfect match.`;
-          }
-    
-          userInfoText.textContent = recommendation;
-        });
-    
-        clearBtn.addEventListener('click', () => {
-          selectedCharacteristics = [];
-          userInput.value = '';
-          updateUserInfo();
-          updateCharacteristics();
-        });
-    
-        // Language switching functionality
-        const languageData = {
-          'en-US': {
-            'title': 'Coffee Recommender',
-            'preferences': 'Tell Us About Your Preferences',
-            'tell-us': 'Choose the trait about yourself...',
-            'enter-preferences': 'Write something about yourself',
-            'clear': 'Clear',
-            'recommend': 'Recommend Coffee',
-            'varieties': 'Coffee Varieties',
-            'arabica': 'Arabica',
-            'arabica-desc': 'Sweet and smooth with complex flavors. The most popular coffee variety.',
-            'robusta': 'Robusta',
-            'robusta-desc': 'Strong and bitter with high caffeine content. Often used in espresso blends.',
-            'liberica': 'Liberica',
-            'liberica-desc': 'Unique fruity and woody flavor. Rare and primarily grown in Southeast Asia.'
-          },
-          'zh-TW': {
-            'title': '咖啡推薦器',
-            'preferences': '告訴我們您的偏好',
-            'tell-us': '選擇描述您的特質...',
-            'enter-preferences': '寫下關於您自己的一些事',
-            'clear': '清除',
-            'recommend': '推薦咖啡',
-            'varieties': '咖啡品種',
-            'arabica': '阿拉比卡',
-            'arabica-desc': '甜美順滑，風味複雜。最受歡迎的咖啡品種。',
-            'robusta': '羅布斯塔',
-            'robusta-desc': '強烈苦味，咖啡因含量高。常用於義式濃縮咖啡。',
-            'liberica': '利比里卡',
-            'liberica-desc': '獨特的水果和木質風味。罕見，主要在東南亞種植。'
-          }
-        };
-    
-        function setLanguage(lang) {
-          document.querySelectorAll('[data-lang-key]').forEach(element => {
-            const key = element.getAttribute('data-lang-key');
-            if (languageData[lang] && languageData[lang][key]) {
-              if (element.tagName === 'INPUT') {
-                element.placeholder = languageData[lang][key];
-              } else {
-                element.textContent = languageData[lang][key];
-              }
-            }
-          });
-    
-          languageSwitch.classList.toggle('zh', lang === 'zh-TW');
-        }
-    
-        languageSwitch.addEventListener('click', () => {
-          const currentLang = languageSwitch.classList.contains('zh') ? 'en-US' : 'zh-TW';
-          setLanguage(currentLang);
-        });
-    
-        // Initialize characteristics and carousel
-        updateCharacteristics();
-        showSlide(0);
-        setLanguage('zh-TW'); // Set default language
-    </script>
+        <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

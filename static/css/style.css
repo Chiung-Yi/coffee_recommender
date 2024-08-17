@@ -13,3 +13,44 @@ input, button {
     margin-top: 20px;
     font-weight: bold;
 }
+.btn {
+    padding: 10px 20px;
+    background-color: #6f4e37;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.btn:hover {
+    background-color: #8b6b4a;
+}
+
+.coffee-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.coffee-variety {
+    display: none;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
