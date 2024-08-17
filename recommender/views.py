@@ -59,19 +59,19 @@ def age_to_group(age):
         return '>65 years old'
 
 coffee_translations = {
-    'Regular drip coffee': {'chinese': '普通濾泡咖啡', 'english': 'Regular drip coffee'},
-    'Espresso': {'chinese': '義式濃縮咖啡', 'english': 'Espresso'},
-    'Latte': {'chinese': '拿鐵咖啡', 'english': 'Latte'},
-    'Cappuccino': {'chinese': '卡布奇諾', 'english': 'Cappuccino'},
-    'Americano': {'chinese': '美式咖啡', 'english': 'Americano'},
-    'Mocha': {'chinese': '摩卡咖啡', 'english': 'Mocha'},
-    'Macchiato': {'chinese': '瑪奇朵', 'english': 'Macchiato'},
-    'Flat White': {'chinese': '白咖啡', 'english': 'Flat White'},
-    'Cortado': {'chinese': '科塔多咖啡', 'english': 'Cortado'},
-    'Iced coffee': {'chinese': '冰咖啡', 'english': 'Iced coffee'},
-    'Cold brew': {'chinese': '冷萃咖啡', 'english': 'Cold brew'},
-    'Pourover': {'chinese': '手沖咖啡', 'english': 'Pourover'},
-    'French press': {'chinese': '法式壓濾咖啡', 'english': 'French press'}
+    'Regular drip coffee': {'chinese': '普通濾泡咖啡', 'english': 'Regular drip coffee', 'url': 'https://www.catamona1998.com/products/catamona-south-america-100-ground-coffee-1'},
+    'Espresso': {'chinese': '義式濃縮咖啡', 'english': 'Espresso', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-coffee-beans'},
+    'Latte': {'chinese': '拿鐵咖啡', 'english': 'Latte', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-coffee-beans'},
+    'Cappuccino': {'chinese': '卡布奇諾', 'english': 'Cappuccino', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-coffee-beans'},
+    'Americano': {'chinese': '美式咖啡', 'english': 'Americano', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Mocha': {'chinese': '摩卡咖啡', 'english': 'Mocha', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Macchiato': {'chinese': '瑪奇朵', 'english': 'Macchiato', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Flat White': {'chinese': '白咖啡', 'english': 'Flat White', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Cortado': {'chinese': '科塔多咖啡', 'english': 'Cortado', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Iced coffee': {'chinese': '冰咖啡', 'english': 'Iced coffee', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Cold brew': {'chinese': '冷萃咖啡', 'english': 'Cold brew', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'},
+    'Pourover': {'chinese': '手沖咖啡', 'english': 'Pourover', 'url': 'https://www.catamona1998.com/products/ciouwaalishancoffeebeans'},
+    'French press': {'chinese': '法式壓濾咖啡', 'english': 'French press', 'url': 'https://www.catamona1998.com/products/rainforest-alliance-colombia'}
 }
 
 def recommend_coffee(user_input):
@@ -141,14 +141,13 @@ def recommend_coffee(user_input):
 
     # 獲取翻譯後的咖啡名稱和URL
     coffee_data = coffee_translations.get(recommended_coffee, 
-                                          {'chinese': recommended_coffee, 'english': recommended_coffee})
-    url = f"https://www.catamona1998.com/categories/{recommended_coffee.lower().replace(' ', '-')}"
+                                          {'chinese': recommended_coffee, 'english': recommended_coffee, 'url': ''})
 
-    return coffee_data, url
+    return coffee_data
 
 def recommend(request):
     if request.method == 'POST':
         user_input = request.POST.get('input', '')
-        recommended_coffee, url = recommend_coffee(user_input)
-        return JsonResponse({'recommendation': recommended_coffee, 'url': url})
+        recommended_coffee = recommend_coffee(user_input)
+        return JsonResponse({'recommendation': recommended_coffee})
     return JsonResponse({'error': 'Invalid request method'})

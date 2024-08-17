@@ -18,6 +18,7 @@ input, button {
     background-color: #6f4e37;
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
     margin: 5px;
 }
@@ -53,4 +54,14 @@ input, button {
 
 .next {
     right: 10px;
+}
+#result a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px dotted #0066cc;
+}
+
+#result a:hover {
+    color: #004080;
+    border-bottom: 1px solid #004080;
 }

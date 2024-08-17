@@ -82,9 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             const recommendationText = languageData[currentLang]['recommended-coffee'];
-            resultDiv.innerHTML = `${recommendationText}<br>
-                                   中文：${data.recommendation.chinese}<br>
-                                   English: ${data.recommendation.english}`;
+            let coffeeNameText;
+            if (currentLang === 'zh-TW') {
+                coffeeNameText = data.recommendation.chinese;
+            } else {
+                coffeeNameText = data.recommendation.english;
+            }
+            const url = data.recommendation.url;
+            resultDiv.innerHTML = `${recommendationText}<a href="${url}" target="_blank">${coffeeNameText}</a>`;
         });
     });
 
