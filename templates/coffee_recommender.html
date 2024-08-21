@@ -337,6 +337,7 @@
     
         <div>
             <p data-lang-key="description">寫下關於您自己的一些事：</p>
+            {% csrf_token %}
             <textarea id="userInput" rows="4" cols="50" data-lang-key="input-placeholder" placeholder="輸入例如:性別、年齡..等"></textarea>
             <div class="button-area">
               <button id="clearInput" class="btn" data-lang-key="clear">清除</button>

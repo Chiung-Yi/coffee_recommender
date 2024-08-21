@@ -71,11 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     getRecommendationButton.addEventListener('click', function() {
         const input = userInput.value;
+        const csrfToken = getCsrfToken();
         fetch('/recommend/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': csrfToken
             },
             body: 'input=' + encodeURIComponent(input)
         })
@@ -98,20 +99,18 @@ document.addEventListener('DOMContentLoaded', function() {
         resultDiv.textContent = '';
     });
 
-    function getCookie(name) {
+    function getCsrfToken() {
         let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith('csrftoken=')) {
+            cookieValue = decodeURIComponent(cookie.substring('csrftoken='.length));
+            break;
+          }
         }
         return cookieValue;
-    }
+      }
 
     // 輪播功能
     const carousel = document.querySelector('.coffee-carousel');
