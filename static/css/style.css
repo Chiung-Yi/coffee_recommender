@@ -65,3 +65,53 @@ input, button {
     color: #004080;
     border-bottom: 1px solid #004080;
 }
+/* 整體佈局 */
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Header 區塊 */
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  /* 內容區塊 */
+  .content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+  }
+  
+  /* 媒體查詢 */
+  @media (max-width: 767px) {
+    /* 手機尺寸下的樣式 */
+    body {
+      padding: 10px;
+    }
+    .content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 1199px) {
+    /* 平板尺寸下的樣式 */
+    body {
+      padding: 15px;
+    }
+    .content {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    /* 桌面尺寸下的樣式 */
+    body {
+      padding: 20px;
+    }
+    .content {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
