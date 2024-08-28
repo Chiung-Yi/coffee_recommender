@@ -74,7 +74,7 @@ preprocessor = ColumnTransformer(
 X = preprocessor.fit_transform(df_clus)
 
 # 執行 K-means 聚類
-kmeans = KMeans(n_clusters=13, random_state=500)
+kmeans = KMeans(n_clusters=5, random_state=500)
 kmeans.fit(X)
 df_clus['cluster'] = kmeans.labels_
 
